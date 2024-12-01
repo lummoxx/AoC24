@@ -1,5 +1,3 @@
-import heapq
-
 file = open('input_files/1.txt')
 lines, left, right, dists, occurences = file.readlines(),[],[],[],[]
 for l in lines :
