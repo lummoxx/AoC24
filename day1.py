@@ -13,6 +13,5 @@ def part1() :
 
 def part2() :
     for l in left :
-        times = right.count(l)
-        occurences.append(l*times)
+        occurences.append(l*right.count(l))
     print(sum(occurences))
