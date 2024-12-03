@@ -3,33 +3,29 @@ file = open('input_files/2.txt', 'r')
 lines = file.read().splitlines()
 
 
-def check(nums : list) -> bool :
-    safe = True
-    increasing = int(nums[1]) > int(nums[0])
-    decreasing = int(nums[0]) > int(nums[1])
+def check(nums : list) -> bool:
+    safe, increasing, decreasing = True, nums[1] > nums[0], nums[0] > nums[1]
     for n in range(1,len(nums)):
-        gap = int(nums[n]) - int(nums[n-1])
-        if decreasing :
+        gap = nums[n] - nums[n-1]
+        if decreasing:
             if not (gap in [-1, -2, -3]):
-                safe = False
-        elif increasing :
+                return False
+        elif increasing:
             if not(gap in [1, 2, 3]):
-                safe = False
-        else :
-            safe = False
-    return safe
+                return False
+        else:
+            return False
+    return True
 
 count = 0
-for l in lines :
-    nums = l.split()
+for l in lines:
+    nums = list(map(int, l.split()))
     safe = check(nums)
-    if (safe) :
+    if safe:
         count = count + 1 
-    else :
-        safe = False
+    else:
         for n in range(0, len(nums)):
             if check(nums[:n] + nums[n+1:]):
-                safe = True
-        if (safe) :
-            count = count + 1 
+                count = count + 1 
+                break
 print(count)
