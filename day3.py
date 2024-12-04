@@ -1,6 +1,5 @@
 
 import math
-import re
 
 file = open('input_files/3.txt', 'r')
 lines = file.read()
