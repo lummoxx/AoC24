@@ -41,7 +41,6 @@ def findDiagonal(r: int, c : int) -> int:
     
 for l in lines:
     count = count + l.count("XMAS") + l.count("SAMX")
-print(count)
 
 rs = range(0,len(lines))
 cs = range(0, len(lines[0]))
