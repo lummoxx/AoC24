@@ -2,27 +2,27 @@ import itertools
 file = open('input_files/5.txt', 'r').read()
 f = file.split("\n\n")
 
-parsedRules = [ row.split("|") for row in f[0].split("\n")]
-parsedPages = f[1].split("\n")
+parsed_rules = [ row.split("|") for row in f[0].split("\n")]
+parsed_pages = f[1].split("\n")
 
-def findMiddle(input_list):
+def find_midpoint(input_list):
     middle = float(len(input_list))/2
     if middle % 2 != 0:
         return input_list[int(middle - .5)]
     else:
         return (input_list[int(middle)], input_list[int(middle-1)])
 
-def followsRule(pages : list, rule : list) -> bool:
+def follows_rule(pages : list, rule : list) -> bool:
     first, second = rule[0], rule[1]
     firsts = [i for i in range(len(pages)) if pages[i] == first]
     seconds = [i for i in range(len(pages)) if pages[i] == second]
     return all ([(f < s) for f in firsts for s in seconds])
 
-def correctWrong(pages : list, rule : list) -> list :
+def correct_wrong(pages : list, rule : list) -> list :
     first, second = rule[0], rule[1]
     f, s = pages.index(first), pages.index(second)
 
-    while(not(followsRule(pages, rule))):
+    while(not(follows_rule(pages, rule))):
         if f > s:
             pages = reorder(pages, rule, f, s)
         
@@ -47,24 +47,24 @@ def reorder(pages : list, rule : list, f : int, s : int) -> list:
 
 count1 = 0
 count2 = 0
-for p in parsedPages:
-    followsrule = True
+for p in parsed_pages:
+    original_conforms_to_rules = True
     pages = p.split(",")
-    firstmiddle = int(findMiddle(pages))
+    original_midpoint = int(find_midpoint(pages))
     
-    while (not all([followsRule(pages, rule) for rule in parsedRules])):
-        for rule in parsedRules:
-            if pages.count(rule[0]) > 0 and pages.count(rule[1]) > 0:
-                if not followsRule(pages, rule):
-                    pages = correctWrong(pages, rule)
-                    followsrule = False
+    while (not all([follows_rule(pages, rule) for rule in parsed_rules])):
+        for rule in parsed_rules:
+            if pages.count(rule[0]) > 0 and pages.count(rule[1]) > 0:               
+                if not follows_rule(pages, rule):
+                    pages = correct_wrong(pages, rule)
+                    original_conforms_to_rules = False
 
-    if followsrule:
-        count1 = count1 + firstmiddle
+    if original_conforms_to_rules:
+        count1 = count1 + original_midpoint
     else:
-        count2 = count2 + int(findMiddle(pages))
+        count2 = count2 + int(find_midpoint(pages))
         
-print("Part 1: " + str(count1))
-print("Part 2: " + str(count2))
+print("Part 1: ", str(count1))
+print("Part 2: ", str(count2))
 
         
