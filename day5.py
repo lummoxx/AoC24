@@ -2,15 +2,8 @@ import itertools
 file = open('input_files/5.txt', 'r').read()
 f = file.split("\n\n")
 
-parsed_rules = [ row.split("|") for row in f[0].split("\n")]
+parsed_rules = [list(map(int, row.split("|"))) for row in f[0].split("\n")]
 parsed_pages = f[1].split("\n")
-
-def find_midpoint(input_list):
-    middle = float(len(input_list))/2
-    if middle % 2 != 0:
-        return input_list[int(middle - .5)]
-    else:
-        return (input_list[int(middle)], input_list[int(middle-1)])
 
 def follows_rule(pages : list, rule : list) -> bool:
     first, second = rule[0], rule[1]
@@ -49,8 +42,8 @@ count1 = 0
 count2 = 0
 for p in parsed_pages:
     original_conforms_to_rules = True
-    pages = p.split(",")
-    original_midpoint = int(find_midpoint(pages))
+    pages = list(map(int, p.split(",")))
+    original_midpoint = pages[int(len(pages)/2)]
     
     while (not all([follows_rule(pages, rule) for rule in parsed_rules])):
         for rule in parsed_rules:
@@ -62,7 +55,7 @@ for p in parsed_pages:
     if original_conforms_to_rules:
         count1 = count1 + original_midpoint
     else:
-        count2 = count2 + int(find_midpoint(pages))
+        count2 = count2 + pages[int(len(pages)/2)]
         
 print("Part 1: ", str(count1))
 print("Part 2: ", str(count2))
