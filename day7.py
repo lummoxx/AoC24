@@ -1,22 +1,19 @@
+import math
 file = open('input_files/7.txt', 'r').read()
 lines = file.splitlines()
 
-def cal(n : int, nums : list, result : int):
-    if len(nums) > 0 and n <= result:
-        p = n * nums[0] 
-        s = n + nums[0] 
-        c = int(str(n) + str(nums[0])) 
-        yield from cal(p, nums[1:], result)
-        yield from cal(s, nums[1:], result)
-        yield from cal(c, nums[1:], result)
+def cal(n : int, nums : list, test_value : int):
+    if len(nums) > 0 and n <= test_value:
+        m = nums[0] 
+        operations = n * m, n + m, math.pow(10,(int(math.log(m,10)) + 1)) * n + m
+        for o in operations:
+            yield from cal(o, nums[1:], test_value)
     else:
         yield n
 
-final = 0
+result = 0
 for l in lines:
-    res, terms = l.split(":")
-    nums = [ int(s) for s in terms.strip().split(" ")]
-    result = int(res)
-    if any([ n == result for n in cal(nums[0], nums[1:], result)]):
-        final += result
-print(final)
+    nums = list(map(int, l.replace(":", "").strip().split(" ")))
+    if nums[0] in cal(nums[1], nums[2:], nums[0]):
+        result += nums[0]
+print(result)
