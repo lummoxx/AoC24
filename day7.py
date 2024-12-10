@@ -5,9 +5,8 @@ lines = file.splitlines()
 def cal(n : int, nums : list, test_value : int):
     if len(nums) > 0 and n <= test_value:
         m = nums[0] 
-        operations = n * m, n + m, math.pow(10,(int(math.log(m,10)) + 1)) * n + m
-        for o in operations:
-            yield from cal(o, nums[1:], test_value)
+        for operation in [n * m, n + m, math.pow(10,(int(math.log(m,10)) + 1)) * n + m]:
+            yield from cal(operation, nums[1:], test_value)
     else:
         yield n
 

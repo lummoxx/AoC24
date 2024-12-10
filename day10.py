@@ -21,9 +21,6 @@ def follow_trails(row : int, col: int, current : int, found : list):
         else: yield 0
     else:
         yield 0
-                
-def count_trails(row : int, col: int) -> int:
-    return sum(follow_trails(r,c, 0))
     
 rs = range(0,len(lines))
 cs = range(0, len(lines[0]))
