@@ -39,9 +39,9 @@ def integer_solutions(a :  tuple[int, int], b :  tuple[int, int], p :  tuple[int
         tokens = (integer_values[0]*3)+integer_values[1]
     return int(tokens+0.5)
     
+print(integer_solutions((0,0), (0,0), (0,0)))
 tokens = 0
 for i,g in enumerate(games):
     [a, b, p] = [ get_x_y(n) for n in g.split("\n")]
     tokens += integer_solutions(a, b, p)
 print(tokens)
-
