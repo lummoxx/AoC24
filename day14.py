@@ -5,7 +5,6 @@ from collections import namedtuple
 file = open('input_files/14.txt', 'r').read()
 lines = file.splitlines()
 
-# w, h = (11, 7)
 w, h = (101, 103)
 mw, mh = (w-1)/2, (h-1)/2
 
@@ -68,5 +67,5 @@ for p in positions:
     if x > mw and y > mh:
         quadrants[4] += positions[p]
 
-print(quadrants[1]*quadrants[2]*quadrants[3]*quadrants[4])
-print(move_until_tree(robots))
+print("Part 1: ", quadrants[1]*quadrants[2]*quadrants[3]*quadrants[4])
+print("Part 2: ", move_until_tree(robots))
