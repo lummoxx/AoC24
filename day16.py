@@ -31,8 +31,7 @@ def step_cost(new_direction : str, old_direction : str):
     return 1001
 
 def find_neighbours(start : tuple[int, int], direction : str):
-    neighbours = []
-    (x,y) = start
+    neighbours, (x,y) = [], start
     for d, (dx, dy) in directions.items():
         cost = step_cost(d, direction)
         if not walls[(x+dx, y+dy)] and ((lowest_cost[x][y] + cost) < lowest_cost[x+dx][y+dy]):
@@ -48,15 +47,13 @@ def traverse(s : tuple[int, int], d : str):
 def reverse_and_subtract(start_tile : tuple[int, int], direction : str, tiles : defaultdict):
     (x,y) = start_tile
     for d, (dx, dy) in directions.items():
-        if (x+dx,y+dy) == start:
-            if tiles[start_tile] == step_cost(d, opposite[start_direction]):
-                for p in tiles:
-                    if tiles[p] > 0:
-                        yield p
-        elif not walls[(x+dx, y+dy)] and lowest_cost[x+dx][y+dy] < tiles[start_tile]: 
+        next_tile = (x+dx,y+dy)
+        if next_tile == start:
+            yield from tiles
+        elif not walls[next_tile] and lowest_cost[x+dx][y+dy] < tiles[start_tile]: 
             new_tiles = copy.deepcopy(tiles)
-            new_tiles[(x+dx,y+dy)] = tiles[start_tile] - step_cost(d, direction)
-            yield from reverse_and_subtract((x+dx,y+dy), d, new_tiles)
+            new_tiles[next_tile] = tiles[start_tile] - step_cost(d, direction)
+            yield from reverse_and_subtract(next_tile, d, new_tiles)
 
 def traverse_backwards():
     for d in directions:
