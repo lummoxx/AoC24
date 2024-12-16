@@ -7,7 +7,7 @@ lines = open('input_files/16.txt', 'r').read().splitlines()
 sys.setrecursionlimit(sys.getrecursionlimit()*10)
 
 directions = {"^":(-1,0), ">":(0,1), "v":(1,0), "<":(0,-1)}
-opposite = {"^": "v", ">":"<", "v":"^", "<":">"}
+opposite = {"^":"v", ">":"<", "v":"^", "<":">"}
 goal = 0,0
 start = 0,0
 walls = defaultdict(lambda:False)
@@ -33,9 +33,8 @@ def step_cost(new_direction : str, old_direction : str):
 def find_neighbours(start : tuple[int, int], direction : str):
     neighbours = []
     (x,y) = start
-    for d in ["^",">","<", "v"] :
+    for d, (dx, dy) in directions.items():
         cost = step_cost(d, direction)
-        (dx, dy) = directions[d]
         if not walls[(x+dx, y+dy)] and ((lowest_cost[x][y] + cost) < lowest_cost[x+dx][y+dy]):
             lowest_cost[x+dx][y+dy] = lowest_cost[x][y] + cost
             neighbours.append(((x+dx,y+dy), d))
@@ -49,8 +48,7 @@ def traverse(s : tuple[int, int], d : str):
 def reverse_and_subtract(start_tile : tuple[int, int], direction : str, tiles : defaultdict):
     (x,y) = start_tile
     if tiles[start_tile] > 0:
-        for d in ["^",">","<", "v"] :
-            (dx, dy) = directions[d]
+        for d, (dx, dy) in directions.items():
             if (x+dx,y+dy) == start:
                 if tiles[start_tile] == step_cost(d, opposite[start_direction]):
                     for p in tiles:
@@ -62,7 +60,7 @@ def reverse_and_subtract(start_tile : tuple[int, int], direction : str, tiles : 
                 yield from reverse_and_subtract((x+dx,y+dy), d, new_tiles)
 
 def traverse_backwards():
-    for d in ["^",">","<", "v"]:
+    for d in directions:
         p = defaultdict(int)
         p[start] = -1
         p[goal] = lowest_cost[goal[0]][goal[1]]
