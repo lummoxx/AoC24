@@ -47,28 +47,27 @@ def traverse(s : tuple[int, int], d : str):
 
 def reverse_and_subtract(start_tile : tuple[int, int], direction : str, tiles : defaultdict):
     (x,y) = start_tile
-    if tiles[start_tile] > 0:
-        for d, (dx, dy) in directions.items():
-            if (x+dx,y+dy) == start:
-                if tiles[start_tile] == step_cost(d, opposite[start_direction]):
-                    for p in tiles:
-                        if tiles[p] > 0:
-                            yield p
-            elif not walls[(x+dx, y+dy)] and lowest_cost[x+dx][y+dy] <= tiles[start_tile]: 
-                new_tiles = copy.deepcopy(tiles)
-                new_tiles[(x+dx,y+dy)] = tiles[start_tile] - step_cost(d, direction)
-                yield from reverse_and_subtract((x+dx,y+dy), d, new_tiles)
+    for d, (dx, dy) in directions.items():
+        if (x+dx,y+dy) == start:
+            if tiles[start_tile] == step_cost(d, opposite[start_direction]):
+                for p in tiles:
+                    if tiles[p] > 0:
+                        yield p
+        elif not walls[(x+dx, y+dy)] and lowest_cost[x+dx][y+dy] < tiles[start_tile]: 
+            new_tiles = copy.deepcopy(tiles)
+            new_tiles[(x+dx,y+dy)] = tiles[start_tile] - step_cost(d, direction)
+            yield from reverse_and_subtract((x+dx,y+dy), d, new_tiles)
 
 def traverse_backwards():
     for d in directions:
         p = defaultdict(int)
         p[start] = -1
         p[goal] = lowest_cost[goal[0]][goal[1]]
-        yield from reverse_and_subtract(goal,d, p)
+        yield from reverse_and_subtract(goal,d,p)
     yield goal
     yield start
 
 traverse(start, start_direction)
 print("Part 1: ", lowest_cost[goal[0]][goal[1]])
 lowest_cost[start[0]][start[1]] = 0
-print("Part 1: ", len(set(traverse_backwards())))
+print("Part 2: ", len(set(traverse_backwards())))
